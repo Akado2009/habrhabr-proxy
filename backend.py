@@ -23,6 +23,7 @@ def add_trademark(word):
         return word + tm_char
     return word
 
+
 class CustomHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
@@ -35,13 +36,13 @@ class CustomHandler(BaseHTTPRequestHandler):
             self.end_headers()
             for a in soup.findAll('a', href=True):
                 if BASE_URL in a['href']:
-                    a['href'] = a['href'].replace(BASE_URL, '{}:{}'.format(IP_ADDRESS, PORT_NUMBER))
+                    a['href'] = a['href'].replace(BASE_URL, 'http://{}:{}'.format(IP_ADDRESS, PORT_NUMBER))
             for element in soup.body.findAll(text=True):
                 text = element.string.strip()
                 if text:
                     words = text.split()
                     words = list(map(add_trademark, words))
-                    element.replace_with(' '.join(words))
+                    element.replace_with(' '.join(words) + ' ')
             self.wfile.write(str(soup).encode())
         
         return
@@ -52,3 +53,7 @@ try:
 
 except KeyboardInterrupt:
     server.socket.close()
+
+    # check pep8
+    # check urls for redirect
+    
